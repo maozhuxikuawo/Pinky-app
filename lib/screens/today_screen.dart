@@ -17,8 +17,25 @@ class TodayScreen extends StatefulWidget {
   State<TodayScreen> createState() => _TodayScreenState();
 }
 
-class _TodayScreenState extends State<TodayScreen> {
+class _TodayScreenState extends State<TodayScreen> with WidgetsBindingObserver {
   DateTime? _selected;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +49,7 @@ class _TodayScreenState extends State<TodayScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         key: const Key('add_task'),
-        onPressed: () => showTaskEditor(context, child.id, day),
+        onPressed: () => showTaskEditor(context, child.id, _selected ?? store.today),
         icon: const Icon(Icons.add),
         label: const Text('添加作业', style: TextStyle(fontWeight: FontWeight.w700)),
       ),
