@@ -69,7 +69,7 @@ class _TodayScreenState extends State<TodayScreen> with WidgetsBindingObserver {
               selected: day,
               today: today,
               stats: stats,
-              onSelect: (d) => setState(() => _selected = d),
+              onSelect: (d) => setState(() => _selected = d == today ? null : d),
             ),
           ),
           SliverToBoxAdapter(child: _ProgressCard(day: day, today: today, tasks: tasks, stats: stats)),
