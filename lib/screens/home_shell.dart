@@ -29,15 +29,32 @@ class _HomeShellState extends State<HomeShell> {
       const SettingsScreen(),
     ];
     return Scaffold(
-      body: SafeArea(child: IndexedStack(index: _tab, children: pages)),
+      body: SafeArea(
+        child: IndexedStack(index: _tab, children: pages),
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tab,
         onDestinationSelected: (i) => setState(() => _tab = i),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.checklist_rounded), label: '作业'),
-          NavigationDestination(icon: Icon(Icons.eco_outlined), selectedIcon: Icon(Icons.eco), label: '成长'),
-          NavigationDestination(icon: Icon(Icons.card_giftcard_outlined), selectedIcon: Icon(Icons.card_giftcard), label: '奖励'),
-          NavigationDestination(icon: Icon(Icons.family_restroom_outlined), selectedIcon: Icon(Icons.family_restroom), label: '家长'),
+          NavigationDestination(
+            icon: Icon(Icons.checklist_rounded),
+            label: '作业',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.eco_outlined),
+            selectedIcon: Icon(Icons.eco),
+            label: '成长',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.card_giftcard_outlined),
+            selectedIcon: Icon(Icons.card_giftcard),
+            label: '奖励',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.family_restroom_outlined),
+            selectedIcon: Icon(Icons.family_restroom),
+            label: '家长',
+          ),
         ],
       ),
     );
@@ -64,16 +81,28 @@ class ChildHeader extends StatelessWidget {
             onTap: () => showChildSwitcher(context),
             child: Padding(
               padding: const EdgeInsets.all(4),
-              child: Row(children: [
-                CircleAvatar(
-                  radius: 24,
-                  backgroundColor: child.color.withValues(alpha: 0.3),
-                  child: Text(child.avatar, style: const TextStyle(fontSize: 28)),
-                ),
-                const SizedBox(width: 10),
-                Text(child.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: textDark)),
-                const Icon(Icons.expand_more, color: textGrey),
-              ]),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 24,
+                    backgroundColor: child.color.withValues(alpha: 0.3),
+                    child: Text(
+                      child.avatar,
+                      style: const TextStyle(fontSize: 28),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    child.name,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: textDark,
+                    ),
+                  ),
+                  const Icon(Icons.expand_more, color: textGrey),
+                ],
+              ),
             ),
           ),
           const Spacer(),
@@ -94,34 +123,54 @@ void showChildSwitcher(BuildContext context) {
       return SafeArea(
         child: SingleChildScrollView(
           child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('切换小朋友', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: textDark)),
-            const SizedBox(height: 8),
-            for (final c in store.children)
-              ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: c.color.withValues(alpha: 0.3),
-                  child: Text(c.avatar, style: const TextStyle(fontSize: 22)),
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                '切换小朋友',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: textDark,
                 ),
-                title: Text(c.name, style: const TextStyle(fontWeight: FontWeight.w600)),
-                subtitle: Text('⭐ ${store.statsFor(c.id).balance}   🔥 连续 ${store.statsFor(c.id).currentStreak} 天'),
-                trailing: c.id == store.currentChild?.id ? Icon(Icons.check_circle, color: c.color) : null,
+              ),
+              const SizedBox(height: 8),
+              for (final c in store.children)
+                ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: c.color.withValues(alpha: 0.3),
+                    child: Text(c.avatar, style: const TextStyle(fontSize: 22)),
+                  ),
+                  title: Text(
+                    c.name,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: Text(
+                    '⭐ ${store.statsFor(c.id).balance}   🔥 连续 ${store.statsFor(c.id).currentStreak} 天',
+                  ),
+                  trailing: c.id == store.currentChild?.id
+                      ? Icon(Icons.check_circle, color: c.color)
+                      : null,
+                  onTap: () {
+                    store.selectChild(c.id);
+                    Navigator.pop(ctx);
+                  },
+                ),
+              ListTile(
+                leading: const CircleAvatar(
+                  backgroundColor: Color(0xFFF2EEF4),
+                  child: Icon(Icons.add, color: textGrey),
+                ),
+                title: const Text('添加小朋友'),
                 onTap: () {
-                  store.selectChild(c.id);
                   Navigator.pop(ctx);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ChildEditScreen()),
+                  );
                 },
               ),
-            ListTile(
-              leading: const CircleAvatar(backgroundColor: Color(0xFFF2EEF4), child: Icon(Icons.add, color: textGrey)),
-              title: const Text('添加小朋友'),
-              onTap: () {
-                Navigator.pop(ctx);
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const ChildEditScreen()));
-              },
-            ),
-            const SizedBox(height: 8),
-          ],
+              const SizedBox(height: 8),
+            ],
           ),
         ),
       );
