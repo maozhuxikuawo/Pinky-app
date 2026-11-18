@@ -92,7 +92,8 @@ void showChildSwitcher(BuildContext context) {
     builder: (ctx) {
       final store = ctx.watch<AppStore>();
       return SafeArea(
-        child: Column(
+        child: SingleChildScrollView(
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text('切换小朋友', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: textDark)),
@@ -121,6 +122,7 @@ void showChildSwitcher(BuildContext context) {
             ),
             const SizedBox(height: 8),
           ],
+          ),
         ),
       );
     },
