@@ -94,7 +94,7 @@ class ChildStats {
     // if today isn't finished yet (so the streak isn't "lost" mid-day).
     var cursor = dayOnly(today);
     if (!perfect.contains(dateKey(cursor))) {
-      cursor = cursor.subtract(const Duration(days: 1));
+      cursor = DateTime(cursor.year, cursor.month, cursor.day - 1);
     }
     var current = 0;
     while (perfect.contains(dateKey(cursor))) {
